@@ -42,47 +42,50 @@ class AdminController {
     }
 
     private function registerParty() {
+//mysql_real_escape_string --need to learn php sanitation
+        $partyName = $_POST['partyName'];
+        $partyNumber = $_POST['partyNumber'];
+        $partyColor = $_POST['partyColor'];
+        $partyLogoName = $_FILES['partyLogo']['name'];
 
-        $party_name = $_POST['partyName'];
-        $party_number = $_POST['partyNumber'];
-        $party_color = $_POST['partyColor'];
-        $party_logo_name = $_FILES['partyLogo']['name'];
-
-        if ($this->partyNumberValid() & $this->partyLogoValid()) {
+        if ($this->partyNumberValid($partyNumber) & $this->partyLogoValid()) {
+            
             $party = new Party();
-            $party->setName($party_name);
-            $party->setNumber($party_number);
-            $party->setColor($party_color);
+            $party->setName($partyName);
+            $party->setNumber($partyNumber);
+            $party->setColor($partyColor);
 
             $mime_type = $_FILES['partyLogo']['type'];
-            $upfile = 'party_logos/' . $party_number . "." . $mime_type;
+            $upfile = 'party_logos/' . $partyNumber . "." . $mime_type;
 
             if (!is_uploaded_file($_FILES['partyLogo']['tmp_name'])) {
                 $this->errors["partyLogoError"] = 'Problem: Possible file upload attack. Filename: ' . $_FILES['partyLogo']['name'];
             } else {
-                //inserting party to database
-
-                $partyDao = new PartyDao();
-                $partyDao->registerParty($party);
 
                 $fileExtention = pathinfo($_FILES['partyLogo']['name'], PATHINFO_EXTENSION);
                 $fileName = 'partyLogos/' . $party->getNumber() . "_logo." . $fileExtention;
                 $logoName = $party->getNumber() . "_logo." . $fileExtention;
                 $party->setLogoName($logoName);
+
+
                 if (!move_uploaded_file($_FILES['partyLogo']['tmp_name'], $fileName)) {//function move_uploaded_file saves into the file
                     $this->errors["partyLogoError"] = 'Problem: Could not move file to destination directory';
                 } else {
-                    $this->saveSeatLogo($fileName);
+                    $this->saveSeatLogo($party);
+
+                    //inserting party to database
+                    $partyDao = new PartyDao();
+                  
+                    $partyDao->registerParty($party);
                 }
             }
             header("Location:admin.php");
         }
     }
 
-    private function saveSeatLogo($fileName) {
+    private function saveSeatLogo($party) {
         $filename = 'partyLogos/' . $party->getLogoName();
-        
-        $image_s = imagecreatefromstring(file_get_contents($fileName));
+        $image_s = imagecreatefromstring(file_get_contents($filename));
         $width = imagesx($image_s);
         $height = imagesy($image_s);
         $newwidth = 40;
@@ -101,7 +104,7 @@ class AdminController {
         imagefill($image, 0, 0, $red);
         Header('Content-type:image/png');
 
-        imagepng($image, 'partyLogos/' . $party->getNumber() . '.png');
+        imagepng($image, 'partyLogos/' . $party->getNumber() . '_seatLogo.png');
         imagedestroy($image);
     }
 
@@ -109,9 +112,15 @@ class AdminController {
         return $this->errors;
     }
 
-    private function partyNumberValid() {
-
-        return true;
+    private function partyNumberValid($partyNumber) {
+        $partyDao = new PartyDao();
+        if ($partyDao->numberExists($partyNumber)) {
+            $this->errors["partyNumberError"] = "Party with same number already exists. Choose another one";
+          
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private function partyLogoValid() {
@@ -121,7 +130,6 @@ class AdminController {
             $partyLogoValid = true;
         } else {
             $this->errors["partyLogoError"] = " ΜΟΝΟ JPEG(JPG), PNG και GIF ΑΡΧΕΙΑ ΕΠΙΤΡΕΠΟΝΤΑΙ";
-            // exit;
         }
 
         if ($_FILES['partyLogo']['error'] > 0) {
@@ -140,7 +148,6 @@ class AdminController {
                 case 7: $this->errors["partyLogoError"] = 'Upload failed: Cannot write to disk';
                     break;
             }
-            //         exit;
         }
 
         return $partyLogoValid;
