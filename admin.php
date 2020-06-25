@@ -1,5 +1,6 @@
 <?php
 require_once 'Controllers/AdminController.php';
+require_once 'Controllers/PartyController.php';
 session_start();
 $adminController = new AdminController();
 $authorized = $adminController->isAuthorized();
@@ -43,6 +44,7 @@ $errors = $adminController->getErrors();
                 ?>
 
                 <div class="row">
+
                     <form action="admin.php" method="POST">
                         <div class="form-group">
                             <input name="logout" type="text" hidden="hidden" value="logout">
@@ -52,9 +54,11 @@ $errors = $adminController->getErrors();
                 </div>
                 <hr>
                 <div class="row">
-                    <p style="color:red"><?php echo $errors["PrimeMessage"]; ?></p>
+                    <h2>Register New Party  </h2>
+
                 </div>
                 <div class="row">
+
                     <form action="admin.php" method="post" enctype="multipart/form-data"> 
                         <div class="form-group">
                             <label for="partyName">Enter Party Name</label>
@@ -68,9 +72,10 @@ $errors = $adminController->getErrors();
                         </div> 
 
                         <div class="form-group">
-                            <div class="input-group input-grpup-lg">
+                            <div class="input-group input-grpup-lg">      
+
                                 <input type="hidden" name="MAX_FILE_SIZE" value="1000000"/>
-                                <input name="partyLogo" type="file" class="custom-file-input" id="party_logo" >
+                                <input name="partyLogo" type="file" class="custom-file-input" id="partyLogo" >
                                 <p style="color:red"><?php echo $errors["partyLogoError"] ?></p>
                                 <label class="custom-file-label" for="logo">Upload Party Logo</label>
                             </div>
@@ -80,16 +85,51 @@ $errors = $adminController->getErrors();
                             <label for="favcolor">Select Party Color:</label>
                             <input name="partyColor" type="color" value="#ff0000"><br>
                         </div> 
-
+                        <p style="color:red"><?php echo $errors["PrimeMessage"]; ?></p>
 
                         <input name="registerParty" type="text" value="registerParty" hidden="hidden">
                         <input type="submit" class="btn btn-primary btn-lg" value="Register Party"/>
+                    </form>
+                </div>
+                <hr>
+                <div class="row">
+                    <h1>Registered parties</h1>
+
+
+
+                    <div style ="font-size:24px;" class="table-responsive">
+                        <table class="table table-bordered  table-hover">
+                            <thead>
+                                <tr>
+                                    <td>Party Logo</td>
+                                    <td>Party Number</td>
+                                    <td>Party Name</td>
+                                    <td>Delete Party</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $partyController = new PartyController();
+                                $registeredParties = $partyController->getRegisteredParties();
+                                foreach ($registeredParties as $party) {
+
+
+                                    echo '<tr>'
+                                    . '<td style="background-color:' . $party->getColor() . '"><img src="PartyLogos/' . $party->getNumber() . '" widht="50" height="50"></td>'
+                                    . '<td>' . $party->getNumber() . '</td>'
+                                    . '<td>' . $party->getName() . '</td>'
+                                    . '<td><a href="delete_party.php?party_number=' . $party->getNumber() . '">Delete Party</a></td>'
+                                    . '</tr>';
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </form>
-    <?php }
-    ?>
-</div>
-</div>
-</body>
+
+        <?php }
+        ?>
+
+    </body>
 </html>

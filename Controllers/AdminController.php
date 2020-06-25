@@ -63,7 +63,7 @@ class AdminController {
             } else {
 
                 $fileExtention = pathinfo($_FILES['partyLogo']['name'], PATHINFO_EXTENSION);
-                $fileName = 'partyLogos/' . $party->getNumber() . "_logo." . $fileExtention;
+                $fileName = 'PartyLogos/' . $party->getNumber() . "_logo." . $fileExtention;
                 $logoName = $party->getNumber() . "_logo." . $fileExtention;
                 $party->setLogoName($logoName);
 
@@ -84,7 +84,7 @@ class AdminController {
     }
 
     private function saveSeatLogo($party) {
-        $filename = 'partyLogos/' . $party->getLogoName();
+        $filename = 'PartyLogos/' . $party->getLogoName();
         $image_s = imagecreatefromstring(file_get_contents($filename));
         $width = imagesx($image_s);
         $height = imagesy($image_s);
@@ -104,7 +104,7 @@ class AdminController {
         imagefill($image, 0, 0, $red);
         Header('Content-type:image/png');
 
-        imagepng($image, 'partyLogos/' . $party->getNumber() . '_seatLogo.png');
+        imagepng($image, 'PartyLogos/' . $party->getNumber() . '_seatLogo.png');
         imagedestroy($image);
     }
 
@@ -114,7 +114,7 @@ class AdminController {
 
     private function partyNumberValid($partyNumber) {
         $partyDao = new PartyDao();
-        if ($partyDao->numberExists($partyNumber)) {
+        if ($partyDao->partyNumberExists($partyNumber)) {
             $this->errors["partyNumberError"] = "Party with same number already exists. Choose another one";
           
             return false;

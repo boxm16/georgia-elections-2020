@@ -7,6 +7,10 @@ class Party {
     private $logoName;
     private $color;
     private $votes;
+ 
+
+        
+    
     
     function getName() {
         return $this->name;
