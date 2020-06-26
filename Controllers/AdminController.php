@@ -33,6 +33,10 @@ class AdminController {
         if (isset($_POST["registerParty"])) {
             $this->registerParty();
         }
+        if (isset($_POST["deleteParty"])) {
+            echo $_POST["partyId"];
+            exit;
+        }
     }
 
     public function logout() {
@@ -49,7 +53,7 @@ class AdminController {
         $partyLogoName = $_FILES['partyLogo']['name'];
 
         if ($this->partyNumberValid($partyNumber) & $this->partyLogoValid()) {
-            
+
             $party = new Party();
             $party->setName($partyName);
             $party->setNumber($partyNumber);
@@ -75,7 +79,7 @@ class AdminController {
 
                     //inserting party to database
                     $partyDao = new PartyDao();
-                  
+
                     $partyDao->registerParty($party);
                 }
             }
@@ -116,7 +120,7 @@ class AdminController {
         $partyDao = new PartyDao();
         if ($partyDao->partyNumberExists($partyNumber)) {
             $this->errors["partyNumberError"] = "Party with same number already exists. Choose another one";
-          
+
             return false;
         } else {
             return true;

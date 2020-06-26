@@ -112,13 +112,11 @@ $errors = $adminController->getErrors();
                                 $partyController = new PartyController();
                                 $registeredParties = $partyController->getRegisteredParties();
                                 foreach ($registeredParties as $party) {
-
-
                                     echo '<tr>'
-                                    . '<td style="background-color:' . $party->getColor() . '"><img src="PartyLogos/' . $party->getNumber() . '" widht="50" height="50"></td>'
+                                    . '<td style="background-color:' . $party->getColor() . '"><img src="PartyLogos/' . $party->getLogoName() . '" widht="50" height="50"></td>'
                                     . '<td>' . $party->getNumber() . '</td>'
-                                    . '<td>' . $party->getName() . '</td>'
-                                    . '<td><a href="delete_party.php?party_number=' . $party->getNumber() . '">Delete Party</a></td>'
+                                    . '<td> <input type="text" name="deleteParty" hidden><input name="partyId" type="number" value="'.$party->getNumber().'" id="partyId" hidden>' . $party->getName() . '</td>'
+                                    . '<td> <input type="button"  data-toggle="modal" data-target="#deleteConfirmationModal" class="btn btn-danger btn-block btn-lg" value="DELETE PARTY" onclick="select_party(this)"/></td>'
                                     . '</tr>';
                                 }
                                 ?>
@@ -126,10 +124,64 @@ $errors = $adminController->getErrors();
                         </table>
                     </div>
                 </div>
+
+
+                <!-- Modal window start -->
+                <form action="admin.php" method="POST" >
+                    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="modal-title text-danger" id="exampleModalLabel"> ATTANTION, DELETION IS UNRECOVERABLE</h2>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <table style ="font-size:36px;" id="confirmationTable" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <td>Logo</td>
+                                                    <td>Number</td>
+                                                    <td>Name</td>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                        <h3 ><center>CONFIRM DELETION</center></h3>
+
+                                    </div>
+                                   
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL AND GO BACK</button>
+                                        <button type="submit" class="btn btn-danger" >COFIRM MY VOTE</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
+            <!-- end of modal window --> 
 
-        <?php }
-        ?>
+        </div>
 
-    </body>
+    <?php }
+    ?>
+    <script>
+        function select_party(node) {
+
+            var row = node.parentNode.parentNode;
+            var clone_row = row.cloneNode(true);
+            clone_row.removeChild(clone_row.lastElementChild);
+            var confirmation_table = document.getElementById("confirmationTable");
+            confirmation_table.deleteRow(0);
+            confirmation_table.appendChild(clone_row);
+        }
+
+    </script>
+
+</body>
 </html>
