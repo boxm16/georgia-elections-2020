@@ -35,6 +35,8 @@ $errors = $adminController->getErrors();
                             <input name="id" id="id" class="form-control" type="text"><br>
                             <label for="password" >Password</label>
                             <input name="password" type="password" class="form-control"><br><br>
+                            <input name="authorize" hidden>
+                            <p> <?php echo $errors["loginMessage"]; ?></p>
                             <input type="submit" value="SUBMIT">
                         </div>
                     </form>
@@ -115,7 +117,7 @@ $errors = $adminController->getErrors();
                                     echo '<tr>'
                                     . '<td style="background-color:' . $party->getColor() . '"><img src="PartyLogos/' . $party->getLogoName() . '" widht="50" height="50"></td>'
                                     . '<td>' . $party->getNumber() . '</td>'
-                                    . '<td> <input type="text" name="deleteParty" hidden><input name="partyId" type="number" value="'.$party->getNumber().'" id="partyId" hidden>' . $party->getName() . '</td>'
+                                    . '<td> <input type="text" name="deleteParty" hidden><input name="partyId" type="number" value="' . $party->getNumber() . '" id="partyId" hidden>' . $party->getName() . '</td>'
                                     . '<td> <input type="button"  data-toggle="modal" data-target="#deleteConfirmationModal" class="btn btn-danger btn-block btn-lg" value="DELETE PARTY" onclick="select_party(this)"/></td>'
                                     . '</tr>';
                                 }
@@ -153,7 +155,7 @@ $errors = $adminController->getErrors();
                                         <h3 ><center>CONFIRM DELETION</center></h3>
 
                                     </div>
-                                   
+
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL AND GO BACK</button>
                                         <button type="submit" class="btn btn-danger" >COFIRM MY VOTE</button>

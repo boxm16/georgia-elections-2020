@@ -8,24 +8,31 @@ class AdminController {
     private $errors;
 
     public function __construct() {
-        $this->errors = array("PrimeMessage" => "",
+        $this->errors = array("loginMessage" => "",
+            "PrimeMessage" => "",
             "partyNameError" => "",
             "partyNumberError" => "",
             "partyLogoError" => "");
     }
 
     public function isAuthorized() {
-
-        if (isset($_POST["id"])) {
-            if ($_POST["id"] == "123" && $_POST["password"] == "321") {
-                $_SESSION["authorized"] = "authorized";
-            }
-        }
         return isset($_SESSION["authorized"]);
     }
 
-    public function dispatchRequests() {
+    public function authorize() {
 
+        if ($_POST["id"] == "123" && $_POST["password"] == "321") {
+            $_SESSION["authorized"] = "authorized";
+            header("Location:admin.php");
+        } else {
+            $this->errors["loginMessage"] = "Wrong credentials. Try again.";
+        }
+    }
+
+    public function dispatchRequests() {
+        if (isset($_POST["authorize"])) {
+            $this->authorize();
+        }
         if (isset($_POST["logout"])) {//if request comes for logout
             $this->logout();
         }
