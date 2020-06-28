@@ -1,17 +1,23 @@
 <?php
 
-class Party {
+class Party implements JsonSerializable {
 
     private $name;
     private $number;
     private $logoName;
     private $color;
     private $votes;
- 
 
-        
-    
-    
+    public function jsonSerialize() {
+        return array(
+            'name' => $this->name,
+            'number' => $this->number,
+            'logoName' => $this->logoName,
+            'color' => $this->color,
+            'votes' => $this->votes,
+        );
+    }
+
     function getName() {
         return $this->name;
     }
@@ -51,8 +57,5 @@ class Party {
     function setVotes($votes) {
         $this->votes = $votes;
     }
-
-
-
 
 }
