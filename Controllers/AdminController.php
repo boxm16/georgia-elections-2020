@@ -30,20 +30,124 @@ class AdminController {
     }
 
     public function dispatchRequests() {
+
         if (isset($_POST["authorize"])) {
             $this->authorize();
         }
-        if (isset($_POST["logout"])) {//if request comes for logout
-            $this->logout();
-        }
+        if ($this->isAuthorized()) {
+            if (isset($_POST["logout"])) {//if request comes for logout
+                $this->logout();
+            }
 
-        if (isset($_POST["registerParty"])) {
-            $this->registerParty();
+            if (isset($_POST["registerParty"])) {
+                $this->registerParty();
+            }
+            if (isset($_POST["deleteParty"])) {
+                $this->deleteParty();
+            }
         }
-        if (isset($_POST["deleteParty"])) {
-            echo $_POST["partyId"];
-            exit;
+    }
+
+    public function dispatchUpdateRequests() {
+        if (isset($_POST["authorize"])) {
+            $this->authorize();
         }
+        if ($this->isAuthorized()) {
+            if (isset($_POST["updateParty"])) {
+                $party = new Party();
+                $partyNumber = $_POST["partyNumber"];
+                $partyName = $_POST["partyName"];
+                $partyColor = $_POST["partyColor"];
+
+                $party->setNumber($partyNumber);
+                $party->setName($partyName);
+                $party->setColor($partyColor);
+                if ($_POST["newPartyNumber"] != $_POST["partyNumber"]) {
+                    //      diladi now i change number, name, and color
+                    if ($this->partyNumberValid($_POST["newPartyNumber"])) {
+
+                        $partyLogoName = $_POST["partyLogoName"];
+                        $newPartyNumber = $_POST["newPartyNumber"];
+
+
+                        $party->setLogoName($partyLogoName);
+                        $this->updateParty($party, $newPartyNumber);
+                        $_SESSION["partyForUpdate"] = $newPartyNumber;
+                    }
+                } else {
+//                    diladi i can change name and color
+                    $this->updatePartyNameAndColor($party);
+                }
+            }
+            if (isset($_POST["updatePartyLogo"])) {
+
+                if ($this->partyLogoValid()) {
+                    $partyNumber = $_POST["partyId"];
+                    $partyLogoName = $_POST["partyLogoName"];
+                    $party = new Party();
+                    $party->setNumber($partyNumber);
+                    $this->deletePartyLogos($party);
+                    $this->updatePartyLogo($party);
+                    $this->saveSeatLogo($party);
+                }
+            }
+        }
+    }
+
+    private function updatePartyLogo($party) {
+//maybe i shoud make some function form this
+
+        $partyNumber = $party->getNumber();
+        $mime_type = $_FILES['partyLogo']['type'];
+
+
+        if (!is_uploaded_file($_FILES['partyLogo']['tmp_name'])) {
+            $this->errors["partyLogoError"] = 'Problem: Possible file upload attack. Filename: ' . $_FILES['partyLogo']['name'];
+        } else {
+
+            $fileExtention = pathinfo($_FILES['partyLogo']['name'], PATHINFO_EXTENSION);
+            $fileName = 'PartyLogos/' . $partyNumber . "_logo." . $fileExtention;
+            $logoName = $partyNumber . "_logo." . $fileExtention;
+            $party->setLogoName($logoName);
+
+
+            if (!move_uploaded_file($_FILES['partyLogo']['tmp_name'], $fileName)) {//function move_uploaded_file saves into the file
+                $this->errors["partyLogoError"] = 'Problem: Could not move file to destination directory';
+            } else {
+                $this->saveSeatLogo($party);
+
+//inserting party to database
+                $partyDao = new PartyDao();
+
+                $partyDao->updatePartyLogo($party);
+            }
+        }header("Location:updateParty.php");
+    }
+
+    private function updatePartyNameAndColor($party) {
+        $partyDao = new PartyDao();
+        $partyDao->updatePartyNameAndColor($party);
+    }
+
+    private function updateParty($party, $newPartyNumber) {
+
+        $newLogoName = $this->updatePartyLogoName($party, $newPartyNumber);
+
+        $party->setLogoName($newLogoName);
+        $partyDao = new PartyDao();
+        $partyDao->updateParty($party, $newPartyNumber);
+    }
+
+    private function updatePartyLogoName($party, $newPartyNumber) {
+        $logoName = $party->getLogoName();
+        $arrayedLogoName = explode("_", $logoName);
+        $newLogoName = $newPartyNumber . "_" . $arrayedLogoName[1];
+        rename("PartyLogos/" . $logoName, "PartyLogos/" . $newLogoName);
+        $seatLogoName = $party->getNumber() . "_seatLogo.png";
+        $newSeatLogoName = $newPartyNumber . "_seatLogo.png";
+        rename("PartyLogos/" . $seatLogoName, "PartyLogos/" . $newSeatLogoName);
+
+        return $newLogoName;
     }
 
     public function logout() {
@@ -67,7 +171,7 @@ class AdminController {
             $party->setColor($partyColor);
 
             $mime_type = $_FILES['partyLogo']['type'];
-            $upfile = 'party_logos/' . $partyNumber . "." . $mime_type;
+
 
             if (!is_uploaded_file($_FILES['partyLogo']['tmp_name'])) {
                 $this->errors["partyLogoError"] = 'Problem: Possible file upload attack. Filename: ' . $_FILES['partyLogo']['name'];
@@ -84,7 +188,7 @@ class AdminController {
                 } else {
                     $this->saveSeatLogo($party);
 
-                    //inserting party to database
+//inserting party to database
                     $partyDao = new PartyDao();
 
                     $partyDao->registerParty($party);
@@ -102,7 +206,7 @@ class AdminController {
         $newwidth = 40;
         $newheight = 40;
         $image = imagecreatetruecolor($newwidth, $newheight);
-        // imagealphablending($image, true);
+// imagealphablending($image, true);
         imagecopyresampled($image, $image_s, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 //create masking
         $mask = imagecreatetruecolor($newwidth, $newheight);
@@ -126,7 +230,7 @@ class AdminController {
     private function partyNumberValid($partyNumber) {
         $partyDao = new PartyDao();
         if ($partyDao->partyNumberExists($partyNumber)) {
-            $this->errors["partyNumberError"] = "Party with same number already exists. Choose another one";
+            $this->errors["partyNumberError"] = "Party with the number " . $partyNumber . " already exists. Choose another one";
 
             return false;
         } else {
@@ -162,6 +266,42 @@ class AdminController {
         }
 
         return $partyLogoValid;
+    }
+
+    public function deleteParty() {
+        $partyId = $_POST["partyId"];
+        $partyLogoName = $_POST["logoName"];
+        $party = new Party();
+        $party->setNumber($partyId);
+        $party->setLogoName($partyLogoName);
+
+        $this->deletePartyFromDataBase($party);
+
+        $this->deletePartyLogos($party);
+    }
+
+    private function deletePartyFromDataBase($party) {
+        //delete from database
+        $partyDao = new PartyDao();
+        $partyDao->deleteParty($party);
+    }
+
+    private function deletePartyLogos($party) {
+        //now delete logos from folder
+        $partyLogoName = $party->getLogoName();
+        $partyId = $party->getNumber();
+        $partyLogoPath = "PartyLogos/" . $partyLogoName;
+        $seatLogoPath = "PartyLogos/" . $partyId . "_seatLogo.png";
+        if (@unlink($partyLogoPath)) {
+            // 
+        } else {
+            //
+        }
+        if (@unlink($seatLogoPath)) {
+            //
+        } else {
+            //
+        }
     }
 
 }

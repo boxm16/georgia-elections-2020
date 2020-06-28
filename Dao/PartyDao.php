@@ -54,9 +54,64 @@ class PartyDao {
         }
     }
 
-    public function updateParty($party) {
-        $query = "UPDATE elections SET party_logo_name='" . $party->getNewName() . "' WHERE party_number=" . $party->getNumber();
-        $result = @$this->db_connection->query($query);
+    public function deleteParty($party) {
+        $query = "DELETE FROM elections WHERE party_number=?";
+        $partyId = $party->getNumber();
+        $statement = $this->db_connection->prepare($query);
+        $statement->bind_param("i", $partyId);
+        $statement->execute();
+    }
+
+    public function getPartyById($partyId) {
+        $party = new Party();
+        $query = "SELECT * FROM elections WHERE party_number=?";
+        $statement = $this->db_connection->prepare($query);
+        $statement->bind_param("i", $partyId);
+        $statement->execute();
+        $result = $statement->get_result();
+        while ($row = $result->fetch_assoc()) {
+
+            $party->setNumber($row['party_number']);
+            $party->setName($row['party_name']);
+            $party->setLogoName($row['party_logo_name']);
+            $party->setColor($row['party_color']);
+        }
+        return $party;
+    }
+
+    public function updateParty($party, $newPartyNumber) {
+        $partyNumber = $party->getNumber();
+        $partyName = $party->getName();
+        $partyColor = $party->getColor();
+        $partyLogoName = $party->getLogoName();
+
+
+        $query = "UPDATE elections SET party_number=?, party_name=?, party_color=?, party_logo_name=? WHERE party_number=?";
+        $statement = $this->db_connection->prepare($query);
+        $statement->bind_param("isssi", $newPartyNumber, $partyName, $partyColor, $partyLogoName, $partyNumber);
+
+        $statement->execute();
+    }
+
+    public function updatePartyNameAndColor($party) {
+        $partyNumber = $party->getNumber();
+        $partyName = $party->getName();
+        $partyColor = $party->getColor();
+
+        $query = "UPDATE elections SET party_name=?, party_color=? WHERE party_number=?";
+        $statement = $this->db_connection->prepare($query);
+        $statement->bind_param("ssi", $partyName, $partyColor, $partyNumber);
+
+        $statement->execute();
+    }
+
+    public function updatePartyLogo($party) {
+        $party_logo_name = $party->getLogoName();
+        $query = "UPDATE elections SET party_logo_name=? WHERE party_number=?";
+        $statement = $this->db_connection->prepare($query);
+        $statement->bind_param("si", $party_logo_name, $partyNumber);
+
+        $statement->execute();
     }
 
 }

@@ -13,4 +13,15 @@ class PartyController {
         return $this->registeredParties;
     }
 
+    public function getPartyForUpdate() {
+        if (isset($_SESSION["partyForUpdate"])) {
+            $partyId = $_SESSION["partyForUpdate"];
+            $partyDao = new PartyDao();
+            $partyForUpdate = $partyDao->getPartyById($partyId);
+            return $partyForUpdate;
+        } else {
+            header("Location:./errorPage.php");
+        }
+    }
+
 }

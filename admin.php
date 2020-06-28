@@ -107,6 +107,7 @@ $errors = $adminController->getErrors();
                                     <td>Party Number</td>
                                     <td>Party Name</td>
                                     <td>Delete Party</td>
+                                    <td>Update Party</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,8 +118,9 @@ $errors = $adminController->getErrors();
                                     echo '<tr>'
                                     . '<td style="background-color:' . $party->getColor() . '"><img src="PartyLogos/' . $party->getLogoName() . '" widht="50" height="50"></td>'
                                     . '<td>' . $party->getNumber() . '</td>'
-                                    . '<td> <input type="text" name="deleteParty" hidden><input name="partyId" type="number" value="' . $party->getNumber() . '" id="partyId" hidden>' . $party->getName() . '</td>'
+                                    . '<td> <input type="text" name="deleteParty" hidden><input name="partyId" type="hidden" value="' . $party->getNumber() . '" id="partyId" hidden><input type="text" name="logoName" value="' . $party->getLogoName() . '" hidden>' . $party->getName() . '</td>'
                                     . '<td> <input type="button"  data-toggle="modal" data-target="#deleteConfirmationModal" class="btn btn-danger btn-block btn-lg" value="DELETE PARTY" onclick="select_party(this)"/></td>'
+                                    . '<td> <input name="partyId" type="hidden" value="' . $party->getNumber() . '" id="partyId" hidden><input type="button"  class="btn btn-warning btn-block btn-lg" value="UPDATE PARTY" onclick="update_party(this)"/></td>'
                                     . '</tr>';
                                 }
                                 ?>
@@ -165,25 +167,43 @@ $errors = $adminController->getErrors();
                         </div>
                     </div>
                 </form>
+                <!-- end of modal window --> 
+
+                <!-- start of hidden form for party update -->
+                <form action="updateParty.php" method="POST">
+                    <table id="updatePartyTable" hidden>
+
+                    </table>
+                    <input type="text" name="goPartyUpdate" hidden>
+                    <button type="submit" id="updatePartyButton" hidden></button>
+                </form>
+                <!-- end of hidden form for party update -->
             </div>
-            <!-- end of modal window --> 
 
-        </div>
 
-    <?php }
-    ?>
-    <script>
-        function select_party(node) {
+        <?php }
+        ?>
+        <script>
+            function select_party(node) {
 
-            var row = node.parentNode.parentNode;
-            var clone_row = row.cloneNode(true);
-            clone_row.removeChild(clone_row.lastElementChild);
-            var confirmation_table = document.getElementById("confirmationTable");
-            confirmation_table.deleteRow(0);
-            confirmation_table.appendChild(clone_row);
-        }
+                var row = node.parentNode.parentNode;
+                var clone_row = row.cloneNode(true);
+                clone_row.removeChild(clone_row.lastElementChild);
+                clone_row.removeChild(clone_row.lastElementChild);
+                var confirmation_table = document.getElementById("confirmationTable");
+                confirmation_table.deleteRow(0);
+                confirmation_table.appendChild(clone_row);
+            }
 
-    </script>
+            function update_party(node) {
+                var td = node.parentNode;
+                var updatePartyTable = document.getElementById("updatePartyTable");
+                updatePartyTable.appendChild(td);
+                var updateButton = document.getElementById("updatePartyButton");
+                updateButton.click();
+            }
 
-</body>
+        </script>
+
+    </body>
 </html>
