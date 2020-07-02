@@ -114,4 +114,11 @@ class PartyDao {
         $statement->execute();
     }
 
+    public function voteParty($partyId) {
+        $query = "UPDATE elections SET votes=votes+1 where party_number=?";
+        $statement = $this->db_connection->prepare($query);
+        $statement->bind_param("i", $partyId);
+        $statement->execute();
+    }
+
 }

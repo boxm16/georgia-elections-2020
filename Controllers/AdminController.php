@@ -49,10 +49,14 @@ class AdminController {
     }
 
     public function dispatchUpdateRequests() {
+
         if (isset($_POST["authorize"])) {
             $this->authorize();
         }
+
+
         if ($this->isAuthorized()) {
+
             if (isset($_POST["updateParty"])) {
                 $party = new Party();
                 $partyNumber = $_POST["partyNumber"];
@@ -91,6 +95,7 @@ class AdminController {
                     $this->saveSeatLogo($party);
                 }
             }
+
         }
     }
 

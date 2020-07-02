@@ -24,4 +24,9 @@ class PartyController {
         }
     }
 
+    public function voteParty($partyId) {
+        $partyDao = new PartyDao();
+        $partyDao->voteParty($partyId);
+    }
+
 }

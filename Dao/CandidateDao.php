@@ -51,4 +51,40 @@ class CandidateDao {
         return $candidates;
     }
 
+    public function deleteCandidate($candidateId) {
+        $query = "DELETE FROM elections_majoritarians WHERE id=?";
+        $statement = $this->db_connection->prepare($query);
+        $statement->bind_param("i", $candidateId);
+        $statement->execute();
+    }
+
+    public function addCandidate($districtId, $candidate) {
+
+        $query = "INSERT INTO elections_majoritarians (first_name, last_name, county_number, supporting_party_number) VALUES (?,?,?,?)";
+        $firstName = $candidate->getFirstName();
+        $lastName = $candidate->getLastName();
+        $supportingParty = $candidate->getSupportingParty();
+        $supportingPartyNumber = $supportingParty->getNumber();
+        $statement = $this->db_connection->prepare($query);
+        $statement->bind_param("ssii", $firstName, $lastName, $districtId, $supportingPartyNumber);
+        $statement->execute();
+    }
+
+    public function changeSupportingParty($candidateId, $newSupportingPartyNumber) {
+        $query = "UPDATE elections_majoritarians SET supporting_party_number=? WHERE id=?";
+        $statement = $this->db_connection->prepare($query);
+        $statement->bind_param("ii", $newSupportingPartyNumber, $candidateId);
+        $statement->execute();
+    }
+
+    public function changeCandidateName($candidate) {
+        $id = $candidate->getId();
+        $firstName = $candidate->getFirstName();
+        $lastName = $candidate->getLastName();
+        $query = "UPDATE elections_majoritarians SET first_name=?, last_name=? WHERE id=?";
+        $statement = $this->db_connection->prepare($query);
+        $statement->bind_param("ssi", $firstName, $lastName, $id);
+        $statement->execute();
+    }
+
 }

@@ -3,13 +3,23 @@
 require_once 'Model/District.php';
 require_once 'Model/Candidate.php';
 require_once 'Dao/CandidateDao.php';
+require_once 'Dao/DistrictDao.php';
+require_once 'Dao/PartyDao.php';
 
 class DistrictController {
 
+    private $errors;
     private $districtsNames;
     private $districts;
 
     public function __construct() {
+        $this->errors = array(
+            "PrimeMessage" => "",
+            "firstNameError" => "",
+            "lastNameError" => "",
+            "supportingPartyError" => "",
+            "UpdatePrimeMessage" => "");
+
         $this->districtsNames = array(
             1 => "საარჩევნო ოლქი #1: მთაწმინდისა და კრწანისის რაიონები",
             2 => "საარჩევნო ოლქი #2: ვაკის რაიონი",
@@ -125,6 +135,124 @@ class DistrictController {
 
     public function getDistricts() {
         return $this->districts;
+    }
+
+    public function getDistrictForUpdate() {
+        if (isset($_SESSION["districtForUpdate"])) {
+            $districtId = $_SESSION["districtForUpdate"];
+            $districtDao = new DistrictDao();
+            $districtForUpdate = $districtDao->getDistrictById($districtId);
+            $districtFullName = $this->districtsNames[$districtId];
+
+            $districtForUpdate->setDistrictFullName($districtFullName);
+            return $districtForUpdate;
+        } else {
+            header("Location:./errorPage.php");
+        }
+    }
+
+    public function getDistrict($districtId) {
+        $districtDao = new DistrictDao();
+        $district = $districtDao->getDistrictById($districtId);
+        $districtFullName = $this->districtsNames[$districtId];
+
+        $district->setDistrictFullName($districtFullName);
+        return $district;
+    }
+
+    public function dispatchUpdateRequests() {
+
+        if (isset($_POST["addCandidate"])) {
+            $supportingPartyNumber = $_POST["supportingPartyId"];
+            $firstName = $_POST["firstName"];
+            $lastName = $_POST["lastName"];
+            $districtId = $_POST["districtId"];
+            if ($this->supportingPartyValid($supportingPartyNumber) && $this->firstNameValid($firstName) && $this->lastNameValid($lastName) && $this->districtIdValid($districtId)) {
+                $candidate = new Candidate();
+                $candidate->setFirstName($firstName);
+                $candidate->setLastName($lastName);
+                $party = new Party();
+                $party->setNumber($supportingPartyNumber);
+                $candidate->setSupportingParty($party);
+
+                $candidateDao = new CandidateDao();
+                $candidateDao->addCandidate($districtId, $candidate);
+            }
+        }
+
+        if (isset($_POST["deleteCandidate"])) {
+            $candidateId = $_POST["candidateId"];
+            $candidateDao = new CandidateDao();
+            $candidateDao->deleteCandidate($candidateId);
+        }
+
+        if (isset($_POST["changeSupportingParty"])) {
+            $candidateId = $_POST["candidateId"];
+
+            $newSupportingPartyNumber = $_POST["newSupportingPartyId"];
+
+            if ($this->supportingPartyValid($newSupportingPartyNumber)) {
+                $candidateDao = new CandidateDao();
+                $candidateDao->changeSupportingParty($candidateId, $newSupportingPartyNumber);
+            }
+        }
+
+        if (isset($_POST["changeCandidateName"])) {
+            $candidateId = $_POST["candidateId"];
+            $firstName = $_POST["newFirstName"];
+            $lastName = $_POST["newLastName"];
+            $candidate = new Candidate();
+            $candidate->setId($candidateId);
+            $candidate->setFirstName($firstName);
+            $candidate->setLastName($lastName);
+            $candidateDao = new CandidateDao();
+            $candidateDao->changeCandidateName($candidate);
+        }
+    }
+
+    private function supportingPartyValid($supportingPartyNumber) {
+
+        if ($supportingPartyNumber == "Choose Supporting Party") {
+            $this->errors["supportingPartyError"] = "You didnt choose supporting party";
+            return false;
+        }
+
+        if ($supportingPartyNumber == "Choose New Supporting Party") {
+            $this->errors["UpdatePrimeMessage"] = "Update was not successful. You didnt choose supporting party";
+            return false;
+        }
+        $partyDao = new PartyDao();
+        if ($partyDao->partyNumberExists($supportingPartyNumber)) {
+            return true;
+        } else {
+            header("Location:errorPage.php");
+        }
+    }
+
+    private function firstNameValid($firstName) {
+        if (strlen($firstName) > 25) {
+            $this->errors["firstNameError"] = "Name too long. Must be less than 25 letters";
+            return false;
+        }return true;
+    }
+
+    private function lastNameValid($lastName) {
+        if (strlen($lastName) > 25) {
+            $this->errors["lastNameError"] = "Name too long. Must be less than 25 letters";
+            return false;
+        }return true;
+    }
+
+    public function getErrors() {
+        return $this->errors;
+    }
+
+    private function districtIdValid($districtId) {
+        if ($districtId > 0 && $districtId < 31) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

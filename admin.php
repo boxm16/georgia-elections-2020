@@ -55,6 +55,8 @@ $errors = $adminController->getErrors();
                     </form>
                 </div>
                 <hr>
+                
+                
                 <div class="row">
                     <h2>Register New Party  </h2>
 
@@ -174,7 +176,7 @@ $errors = $adminController->getErrors();
                     <table id="updatePartyTable" hidden>
 
                     </table>
-                    <input type="text" name="goPartyUpdate" hidden>
+                    <input type="text" name="goCandidateUpdate" hidden>
                     <button type="submit" id="updatePartyButton" hidden></button>
                 </form>
                 <!-- end of hidden form for party update -->
@@ -852,7 +854,8 @@ $errors = $adminController->getErrors();
 
                             </div>
                             <form action="updateDistrict.php" method="POST">
-                                <input type="number" name="districtId_voting" id="districtId" hidden="">
+                                <input type="hidden" name="districtId" id="districtId" >
+                                <input type="hidden" name="goDistrictUpdate" >
                                 <input id="submitButton" hidden type="submit" data-toggle="modal" data-target="#loadingModal">
                             </form>
                         </div> 
@@ -992,13 +995,13 @@ $districts = $districtController->getDistricts();
                         displayBodyText += "<table class=\"table table-sm \"><thead></thead><tbody>";
                         var candidates = district.districtCandidates;
                         if (candidates != null) {
-                            var stopPoint = 0;
+                          //  var stopPoint = 0;
                             for (candidate of candidates) {
-                                stopPoint++;
+                             //   stopPoint++;
                                 displayBodyText += "<tr><td style=\"width:40px\">" + candidate.supportingParty.number + "</td><td><img src=\"partyLogos/" + candidate.supportingParty.logoName + "\" style=\"width:40px\"></td><td><span style=\"font-weight:bold\" >" + candidate.firstName + " " + candidate.lastName + "</span><br><span class=\"small\">" + candidate.supportingParty.name + "</span></td><td><span style=\"font-weight:bold\" >" + candidate.percent + "%</span><br><span class=\"small\">" + candidate.votes + " ხმა</span></td></tr>";
-                                if (stopPoint > 1) {
-                                    break;
-                                }
+                              //  if (stopPoint > 1) {
+                                //    break;
+                               // }
                             }
                             if (districtId < 31) {//31,32,33 --tbilisi, abkhazia, s.ossetia
                                 //displayBodyText += "<tr><td></td><td><td><span class=\"small\">" + district.bottomMessage + "</span></td><td><span >" + district.restCandidatesPercent + "%</span></td></tr>";
