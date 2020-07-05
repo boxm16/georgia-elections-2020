@@ -121,4 +121,36 @@ class PartyDao {
         $statement->execute();
     }
 
+    public function getAllPartyVotes() {
+        $allPartyVotes = 0;
+        $query = "SELECT SUM(votes) FROM elections";
+        $result = $this->db_connection->query($query);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $allPartyVotes = $row["SUM(votes)"];
+        }
+        return $allPartyVotes;
+    }
+
+    public function getPartiesOrderedByVotes() {
+
+        $parties = array();
+        $query = "SELECT * FROM elections ORDER BY votes DESC, party_number ASC";
+        if (!($result = @$this->db_connection->query($query))) {
+            header("Location:errorPage.php");
+        } else {
+            while ($row = $result->fetch_object()) {
+                $party = new Party();
+                $party->setNumber($row->party_number);
+                $party->setName($row->party_name);
+                $party->setColor($row->party_color);
+                $party->setLogoName($row->party_logo_name);
+                $party->setBlock($row->block);
+                $party->setVotes($row->votes);
+                array_push($parties, $party);
+            }
+            return $parties;
+        }
+    }
+
 }

@@ -87,4 +87,12 @@ class CandidateDao {
         $statement->execute();
     }
 
+    public function voteCandidate($candidateId) {
+        $query = "UPDATE elections_majoritarians SET votes=votes+1 WHERE id=?";
+        $statement = $this->db_connection->prepare($query);
+        $statement->bind_param("i", $candidateId);
+        $statement->execute();
+
+    }
+
 }

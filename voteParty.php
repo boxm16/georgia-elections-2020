@@ -56,7 +56,7 @@ $registeredParties = $partyController->getRegisteredParties();
         </div>
 
         <!-- Modal window start -->
-        <form action="majoritarianDistrictsMap.php" method="POST" >
+        <form action="votingDispatcher.php" method="POST" >
             <div class="modal fade " id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
@@ -96,15 +96,7 @@ $registeredParties = $partyController->getRegisteredParties();
         </form>
         <!-- end of modal window --> 
 
-        <!-- start of hidden form for party update -->
-        <form action="updateParty.php" method="POST">
-            <table id="updatePartyTable" hidden>
-
-            </table>
-            <input type="text" name="goCandidateUpdate" hidden>
-            <button type="submit" id="updatePartyButton" hidden></button>
-        </form>
-        <!-- end of hidden form for party update -->
+     
         <script>
             function select_party(node) {
                 var row = node.parentNode.parentNode;
