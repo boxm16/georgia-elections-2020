@@ -14,7 +14,7 @@ if (isset($_POST["voteParty"]) && isset($_POST["partyId"])) {
     $candidateId = $_POST["candidateId"];
     $candidateController = new CandidateController();
     $candidateController->voteCandidate($candidateId);
-    var_dump($_POST);
+
     header("Location:results.php");
 }else {
     header("Location:errorPage.php");

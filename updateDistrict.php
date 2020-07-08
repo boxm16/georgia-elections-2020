@@ -109,7 +109,7 @@ $errors = $districtController->getErrors();
 
                                 echo "<tr>"
                                 . '<td ><input name="candidateId" type="hidden" value="' . $candidate->getId() . '" >' . $party->getNumber() . '</td>'
-                                . "<td style=\"background-color:" . $party->getColor() . "\"><img width=\"40px\" heigth=\"40px\" src=\"partyLogos/" . $party->getLogoName() . "\" ></td>"
+                                . "<td style=\"background-color:" . $party->getColor() . "\"><img width=\"40px\" heigth=\"40px\" src=\"PartyLogos/" . $party->getLogoName() . "\" ></td>"
                                 . "<td><span class=\"candidateFullName\" style=\"font-weight:bold\" >" . $candidate->getFirstName() . " " . $candidate->getLastName() . "</span><br><span class=\"small\">" . $party->getName() . "</span></td> "
                                 . '<td><input type="button"  data-toggle="modal" data-target="#deleteCandidateModal"  class="btn btn-danger btn-block btn-sm" value="Delete Candidate" onclick="deleteCandidate(this)"/></td>'
                                 . '<td><input type="button" data-toggle="modal" data-target="#changeSupportingPartyModal" class="btn btn-warning btn-block btn-sm" value="Change Supporting Party" onclick="changeSupportingParty(this)"/></td>'

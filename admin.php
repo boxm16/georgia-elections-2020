@@ -1000,7 +1000,7 @@ $districts = $districtController->getDistricts();
                           //  var stopPoint = 0;
                             for (candidate of candidates) {
                              //   stopPoint++;
-                                displayBodyText += "<tr><td style=\"width:40px\">" + candidate.supportingParty.number + "</td><td><img src=\"partyLogos/" + candidate.supportingParty.logoName + "\" style=\"width:40px\"></td><td><span style=\"font-weight:bold\" >" + candidate.firstName + " " + candidate.lastName + "</span><br><span class=\"small\">" + candidate.supportingParty.name + "</ span></td></tr>";
+                                displayBodyText += "<tr><td style=\"width:40px\">" + candidate.supportingParty.number + "</td><td><img src=\"PartyLogos/" + candidate.supportingParty.logoName + "\" style=\"width:40px\"></td><td><span style=\"font-weight:bold\" >" + candidate.firstName + " " + candidate.lastName + "</span><br><span class=\"small\">" + candidate.supportingParty.name + "</ span></td></tr>";
                               //  if (stopPoint > 1) {
                                 //    break;
                                // }

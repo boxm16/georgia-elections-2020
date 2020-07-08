@@ -56,7 +56,7 @@ if (isset($_POST["goDistrictVoting"]) && isset($_POST["districtId"])) {
                                     $party = $candidate->getSupportingParty();
 
                                     echo "<tr>"
-                                    . "<td style=\"background-color:" . $party->getColor() . "\"><img width=\"40px\" heigth=\"40px\" src=\"partyLogos/" . $party->getLogoName() . "\" ></td>"
+                                    . "<td style=\"background-color:" . $party->getColor() . "\"><img width=\"40px\" heigth=\"40px\" src=\"PartyLogos/" . $party->getLogoName() . "\" ></td>"
                                     . '<td ><input name="candidateId" type="hidden" value="' . $candidate->getId() . '" >' . $party->getNumber() . '</td>'
                                     . "<td><span class=\"candidateFullName\" style=\"font-weight:bold\" >" . $candidate->getFirstName() . " " . $candidate->getLastName() . "</span><br><span class=\"small\">" . $party->getName() . "</span></td> "
                                     . '<td><input type="button"  data-toggle="modal" data-target="#deleteCandidateModal"  class="btn btn-primary btn-block btn-lg" value="მიეცი ხმა" onclick="voteCandidate(this)"/></td>'

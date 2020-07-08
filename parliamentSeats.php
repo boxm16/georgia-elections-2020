@@ -85,7 +85,7 @@
                     // and now filling the base with mandates
                     while ($mandates > 0) {
                         $id_index_trigger = $id_index + 3;
-                        echo ' <image  name="image" href="partyLogos/' . $party->getNumber() . '_seatLogo.png" x="' . $party_image_start_location_X . '" y="' . $party_image_start_location_Y . '" height="40px" width="40px"   class="party_' . $party->getNumber() . ' proportional base">'
+                        echo ' <image  name="image" href="PartyLogos/' . $party->getNumber() . '_seatLogo.png" x="' . $party_image_start_location_X . '" y="' . $party_image_start_location_Y . '" height="40px" width="40px"   class="party_' . $party->getNumber() . ' proportional base">'
                         . '<animate
         name="image_X"
         attributeName = "x"
@@ -166,7 +166,7 @@
                     $majoritarian = $majoritarians[$x];
 
       
-                    echo ' <image  name="image" href="partyLogos/' . $majoritarian->getNumber() . '_seatLogo.png" x="' . $XA . '" y="' . $YA . '" height="40px" width="40px"   class="party_' . $majoritarian->getNumber() . ' majoritarian base ' . $x . '">'
+                    echo ' <image  name="image" href="PartyLogos/' . $majoritarian->getNumber() . '_seatLogo.png" x="' . $XA . '" y="' . $YA . '" height="40px" width="40px"   class="party_' . $majoritarian->getNumber() . ' majoritarian base ' . $x . '">'
                     . '<animate
         name="image_X"
         attributeName = "x"
