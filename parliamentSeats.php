@@ -137,7 +137,7 @@
                         $mandates--;
                     }
 
-                    echo '<text names="text" font-weight="bold" x="' . $party_text_start_location . '" y="90">' . $party->getMandates() . '+' . $party->getGhostMandates() . '</text>';
+                    echo '<text names="text" font-weight="bold" x="' . $party_text_start_location . '" y="90">' . $party->getMandates()  . '</text>';
                     $party_space_index++;
                 }
 //majoritarian olqebi

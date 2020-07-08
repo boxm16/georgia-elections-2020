@@ -178,7 +178,7 @@ $errors = $adminController->getErrors();
                     <table id="updatePartyTable" hidden>
 
                     </table>
-                    <input type="text" name="goCandidateUpdate" hidden>
+                    <input type="text" name="goPartyUpdate" hidden>
                     <button type="submit" id="updatePartyButton" hidden></button>
                 </form>
                 <!-- end of hidden form for party update -->

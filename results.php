@@ -830,37 +830,41 @@ $districts = $resultsController->getDistricts();
 
 
             <div class="row">
-                <?php
-                echo "<br>Total Voted:" . $resultsController->getTotalVotes();
-                echo "<br>Qualified VOtes:" . $resultsController->getQualifiedVotes();
-                echo "<br>Left Mandates:" . $resultsController->getLeftMandates();
-                echo "<br>";
-                ?>
-                <div>
-                    <table class="table table-responsive">
-                        <th>Name</th>
-                        <th>Percents</th>
-                        <th>Number of parties in Block</th>
-                        <th>First calculation mandates</th>
-                        <th>Full mandate number</th>
-                        <th>Added from left mandates</th>
-                        <th>Proportional Mandates  </th>
-                        <th>Ghost mandates  </th>
-                        <th>Majoritarian mandates  </th>
-                        <th>Cutted mandates  </th>
-                        <th>Added from Cutted mandates  </th>
-                        <th>Final Proportional mandates  </th>
-                        <?php
-                        foreach ($qualifiedParties as $party) {
+                <div class="col col-lg-12">
+                    <center><h1>მოანაცემები ანალიტიკურად</h1></center>
+                    <?php
+                    echo "<br>Total Voted:" . $resultsController->getTotalVotes();
+                    echo "<br>Qualified Votes:" . $resultsController->getQualifiedVotes();
+                    echo "<br>Left Mandates:" . $resultsController->getLeftMandates();
+                    echo "<br>";
+                    ?>
+                    <div>
 
-                            echo "<tr><td>" . $party->getNumber() . " " . $party->getName() . "</td><td> " . $party->getPercents() . "%.</td><td>" . $party->getBlock() . "</td><td>" . "" . $party->getFirstCalculationMandates() . "</td><td>" . $party->getMandateFullNumber() . "</td><td>" . $party->getAddedFromLeftMandates() . "</td><td>" . $party->getMandates() . "</td><td>" . $party->getGhostMandates() . "</td><td>" . $party->getMajoritarianMandates() . "</td><td>" . $party->getCuttedMandates() . "</td><td>" . $party->getAddedFromCuttedMandates() . "</td><td>" . $party->getFinalProportionalMandates() . "</td></tr>";
-                        }
-                        echo "<tr><td> -------1% ----------</td><td> -----------------</td><td> -------</td><td> ----------</td><td> --------</td><td> --------</td><td> --------</td><td> --------</td><td> --------</td><td> --------</td><td> --------</td><td> --------</td></tr>";
-                        foreach ($disqualifiedParties as $party) {
-                            echo "<tr><td>" . $party->getNumber() . " " . $party->getName() . "</td><td> " . $party->getPercents() . "%.</td><td>" . $party->getBlock() . "</td><td>" . "" . $party->getFirstCalculationMandates() . "</td><td>" . $party->getMandateFullNumber() . "</td><td>" . $party->getAddedFromLeftMandates() . "</td><td>" . $party->getMandates() . "</td><td>" . $party->getGhostMandates() . "</td><td>" . $party->getMajoritarianMandates() . "</td><td>" . $party->getCuttedMandates() . "</td><td>" . $party->getAddedFromCuttedMandates() . "</td><td>" . $party->getFinalProportionalMandates() . "</td></tr>";
-                        }
-                        ?>
-                    </table >
+                        <table class="table table-responsive">
+                            <th>Name</th>
+                            <th>Percents</th>
+                            <th>Number of parties in Block</th>
+                            <th>First calculation mandates</th>
+                            <th>Full mandate number</th>
+                            <th>Added from left mandates</th>
+                            <th>Proportional Mandates  </th>
+                            <th>Ghost mandates  </th>
+                            <th>Majoritarian mandates  </th>
+                            <th>Cutted mandates  </th>
+                            <th>Added from Cutted mandates  </th>
+                            <th>Final Proportional mandates  </th>
+                            <?php
+                            foreach ($qualifiedParties as $party) {
+
+                                echo "<tr><td>" . $party->getNumber() . " " . $party->getName() . "</td><td> " . $party->getPercents() . "%.</td><td>" . $party->getBlock() . "</td><td>" . "" . $party->getFirstCalculationMandates() . "</td><td>" . $party->getMandateFullNumber() . "</td><td>" . $party->getAddedFromLeftMandates() . "</td><td>" . $party->getMandates() . "</td><td>" . $party->getGhostMandates() . "</td><td>" . $party->getMajoritarianMandates() . "</td><td>" . $party->getCuttedMandates() . "</td><td>" . $party->getAddedFromCuttedMandates() . "</td><td>" . $party->getFinalProportionalMandates() . "</td></tr>";
+                            }
+                            echo "<tr><td> -------1% ----------</td><td> -----------------</td><td> -------</td><td> ----------</td><td> --------</td><td> --------</td><td> --------</td><td> --------</td><td> --------</td><td> --------</td><td> --------</td><td> --------</td></tr>";
+                            foreach ($disqualifiedParties as $party) {
+                                echo "<tr><td>" . $party->getNumber() . " " . $party->getName() . "</td><td> " . $party->getPercents() . "%.</td><td>" . $party->getBlock() . "</td><td>" . "" . $party->getFirstCalculationMandates() . "</td><td>" . $party->getMandateFullNumber() . "</td><td>" . $party->getAddedFromLeftMandates() . "</td><td>" . $party->getMandates() . "</td><td>" . $party->getGhostMandates() . "</td><td>" . $party->getMajoritarianMandates() . "</td><td>" . $party->getCuttedMandates() . "</td><td>" . $party->getAddedFromCuttedMandates() . "</td><td>" . $party->getFinalProportionalMandates() . "</td></tr>";
+                            }
+                            ?>
+                        </table >
+                    </div>
                 </div>
             </div>
         </div>
