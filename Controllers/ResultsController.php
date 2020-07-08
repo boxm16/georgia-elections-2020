@@ -255,9 +255,8 @@ class ResultsController {
                 $closingMechanismCuttedMandates++;
                 $this->cuttedMandates++;
                 $party->setFinalProportionalMandates($party->getMandates() - $closingMechanismCutter);
-                $partyCuttedMandate = $party->getCuttedMandates();
-                $partyCuttedMandate++;
-                $party->setCuttedMandates($partyCuttedMandate);
+
+                $party->setCuttedMandates($closingMechanismCutter);
             } else {
                 $party->setFinalProportionalMandates($party->getMandates());
             }

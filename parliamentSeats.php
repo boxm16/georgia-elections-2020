@@ -71,7 +71,7 @@
                     $location = array("party_" . $party->getNumber(), $party_circle_start_location_X, $party_circle_start_location_Y);
                     array_push($parties_base_location, $location);
                     $ghost_mandates = $party->getGhostMandates();
-                    $mandates = $party->getMandates();
+                    $mandates = $party->getFinalProportionalMandates();
                     //drawing party base
                     echo '<circle name="base" cx="' . $party_circle_start_location_X . '" cy="' . $party_circle_start_location_Y . '" r="20" stroke="' . $party->getColor() . '" stroke-width="3" fill="white"  fill-opacity="1" >'
                     . '</circle>';
@@ -137,7 +137,7 @@
                         $mandates--;
                     }
 
-                    echo '<text names="text" font-weight="bold" x="' . $party_text_start_location . '" y="90">' . $party->getMandates()  . '</text>';
+                    echo '<text names="text" font-weight="bold" x="' . $party_text_start_location . '" y="90">' . $party->getFinalProportionalMandates()  . '</text>';
                     $party_space_index++;
                 }
 //majoritarian olqebi
