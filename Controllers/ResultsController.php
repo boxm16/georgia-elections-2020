@@ -25,6 +25,7 @@ class ResultsController {
         $this->cuttedMandates = 0;
         $this->qualifiedParties = array();
         $this->disqualifiedParties = array();
+        $this->majoritarianMandates = array();
         $this->totalVotes = $this->getAllPartyVotes();
         $this->qualifyParties();
         $this->calculateProportionalMandates();
@@ -138,35 +139,41 @@ class ResultsController {
     }
 
     private function calculateDistrictCandidates($district) {
+        $district->setWinner(null);
+        $message = "გამარჯვებული ვერ ვლინდება პირველივე ტურში. საჭიროა მეორე ტური";
+
         $districtTotalVotes = $district->getTotalVotes();
         $restCandidatesPercent = 100;
         $candidateIndex = 0;
         foreach ($district->getDistrictCandidates() as $candidate) {
             $candidateIndex++;
             if ($districtTotalVotes > 0) {
-                $candidatePercent = intval(($candidate->getVotes() * 100) / $districtTotalVotes);
-                $candidate->setPercent($candidatePercent);
+                $candidatePercent = ($candidate->getVotes() * 100) / $districtTotalVotes;
+                $candidatePercentRounded = round($candidatePercent, 2);
+                $candidate->setPercent($candidatePercentRounded);
                 if ($candidateIndex < 3) {
-                    $restCandidatesPercent -= $candidatePercent;
+                    $restCandidatesPercent -= $candidatePercentRounded;
                 }
 
-                if ($candidatePercent > 50) {
+                if ($candidatePercentRounded > 50) {
+
                     $winnerParty = $candidate->getSupportingParty();
                     $winnerPartyNumber = $winnerParty->getNumber();
                     $this->addMajoritarianMandateToParty($winnerPartyNumber);
-                    $district->setWinner(true);
+                    $district->setWinner($winnerParty);
+
+
                     $message = "გამარჯვებული ვლინდება პირველივე ტურში";
-                } else {
-                    $district->setWinner(false);
-                    $message = "გამარჯვებული ვერ ვლინდება პირველივე ტურში. საჭიროა მეორე ტური";
                 }
             } else {
                 $candidate->setPercent(0);
                 $message = "არ არსებობს არცერთი მიცემული ხმა";
                 $restCandidatesPercent = 0;
             }
+            $bottomMessage = "დანარჩენი კანდიდატები ";
+            $district->setRestCandidatesPercent(round($restCandidatesPercent, 2));
             $district->setMessage($message);
-            $district->setBottomMessage($restCandidatesPercent);
+            $district->setBottomMessage($bottomMessage);
         }
     }
 
@@ -216,7 +223,7 @@ class ResultsController {
         $this->disqualifiedParties = $disqualifiedParties;
     }
 
-    function getDistricts() {
+    public function getDistricts() {
         return $this->districts;
     }
 
@@ -278,6 +285,27 @@ class ResultsController {
 
     function getCuttedMandates() {
         return $this->cuttedMandates;
+    }
+
+    public function countQualifiedParties() {
+        return count($this->qualifiedParties);
+    }
+
+    function getMajoritarianMandates() {
+
+        $majoritarianMandates = array();
+
+        for ($x = 1; $x < 31; $x++) {
+            $district = $this->districts[$x];
+            if ($district->getWinner() == null) {
+                $party = new Party();
+                $party->setNumber(0);
+                array_push($majoritarianMandates, $party);
+            } else {
+                $winnerParty = $district->getWinner();
+                array_push($majoritarianMandates, $winnerParty);
+            }
+        } return $majoritarianMandates;
     }
 
 }

@@ -181,9 +181,11 @@ class DistrictController {
         }
 
         if (isset($_POST["deleteCandidate"])) {
+             
             $candidateId = $_POST["candidateId"];
             $candidateDao = new CandidateDao();
             $candidateDao->deleteCandidate($candidateId);
+       
         }
 
         if (isset($_POST["changeSupportingParty"])) {
@@ -230,14 +232,14 @@ class DistrictController {
     }
 
     private function firstNameValid($firstName) {
-        if (strlen($firstName) > 25) {
+        if (mb_strlen($firstName) > 25) {
             $this->errors["firstNameError"] = "Name too long. Must be less than 25 letters";
             return false;
         }return true;
     }
 
     private function lastNameValid($lastName) {
-        if (strlen($lastName) > 25) {
+        if (mb_strlen($lastName) > 25) {
             $this->errors["lastNameError"] = "Name too long. Must be less than 25 letters";
             return false;
         }return true;

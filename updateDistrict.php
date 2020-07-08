@@ -40,10 +40,11 @@ $errors = $districtController->getErrors();
                 $districtForUpdate = $districtController->getDistrictForUpdate();
                 $candidates = $districtForUpdate->getDistrictCandidates();
                 ?>
+                <a href="admin.php">GO BACK TO MAIN PAGE</a>
                 <div class="row">
 
                     <h3> <?php echo $districtForUpdate->getDistrictFullName() ?></h3>
-                    <a href="admin.php">GO BACK TO MAIN PAGE</a>
+
                     <hr>
 
                     <div class="col col-lg-10">
@@ -127,7 +128,7 @@ $errors = $districtController->getErrors();
 
 
                 <!-- Modal for deletion confirmation start -->
-                <form action="updateParty.php" method="post" > 
+                <form action="updateDistrict.php" method="post" > 
                     <div class="modal fade" id="deleteCandidateModal" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                             <div class="modal-dialog modal-lg" role="document">
@@ -237,7 +238,7 @@ $errors = $districtController->getErrors();
                                         <center><h3>Enter New Name For Candidate</h3></center>
                                         <div class="form-group">
                                             <label for="firstName">Change Candidate`s First Name</label>
-                                           <input  name="newFirstName" id="newFirstName" type="text" class="form-control font-weight-bold" style ="font-size:34px" aria-describedby="firstNameError" >
+                                            <input  name="newFirstName" id="newFirstName" type="text" class="form-control font-weight-bold" style ="font-size:34px" aria-describedby="firstNameError" >
                                         </div>
                                         <div class="form-group">
                                             <label for="lastName">Change Candidate`s Last Number</label>

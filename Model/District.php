@@ -12,6 +12,7 @@ class District implements JsonSerializable {
     private $bottomMessage;
 
     public function __construct() {
+        
         $this->districtCandidates = array();
         $this->message = "";
         $this->bottomMessage = "";
