@@ -91,7 +91,7 @@ $districts = $resultsController->getDistricts();
                 <div class="col-lg-12">
                     <div onmousemove="showCoords(event)">
                         <h1><p class="text-center">მაჟორიტარული არჩევნების შედეგები</p></h1>
-                        <h6><p class="text-center">ნაჩვენებია სამი საუკეთესო შედეგი. სრული შედეგების სანახავად დააწკაპუნე საარჩევნო ოლქზე</p></h6>
+                        <h6><p class="text-center">ნაჩვენებია ორი საუკეთესო შედეგი. სრული შედეგების სანახავად დააწკაპუნე საარჩევნო ოლქზე</p></h6>
 
                         <svg version="1.1" id="svg3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 700 350" style="enable-background:new 0 0 750.4 555.8;" xml:space="preserve">
                         <style type="text/css">

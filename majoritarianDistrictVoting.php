@@ -65,50 +65,52 @@ if (isset($_POST["goDistrictVoting"]) && isset($_POST["districtId"])) {
                                 ?> </table></div>                       
                 </div>
             </div>
-            <?php
-        } else {
-            echo "<h1>ოკუპირებულ ტერიტორიებზე არჩევნები არ ტარდება</1> ";
-        }
-        ?>
-
-
-        <!-- Modal for deletion confirmation start -->
-        <form action="votingDispatcher.php" method="post" > 
-            <div class="modal fade" id="deleteCandidateModal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="modal-title text-success" id="exampleModalLabel"> დაადასტურეთ თქვენი არჩევანი</h2>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <center><h2 class="modal-title text-success" id="exampleModalLabel"> თქვენ ხმას აძლევთ</h2></center>
-                                <br>
-                                <table style ="font-size:36px;" id="votingConfirmationTable" class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <td>ლოგო</td>
-                                            <td>ნომერი</td>
-                                            <td>დასახელება</td>
-                                        </tr>
-                                    </thead>
-                                </table>
-                                <h3 class="modal-title text-danger" ><center>ყურადღება, ეს არჩევანი საბოლოოა</center></h3>
-                            </div>
-                            <div class="modal-footer">
-                                <input type="hidden" name="voteCandidate">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">გაუქმება და უკან დაბრუნება</button>
-                                <button type="submit" class="btn btn-primary" >ვადასტურებ</button>
+            <!-- Modal for deletion confirmation start -->
+            <form action="votingDispatcher.php" method="post" > 
+                <div class="modal fade" id="deleteCandidateModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="modal-title text-success" id="exampleModalLabel"> დაადასტურეთ თქვენი არჩევანი</h2>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <center><h2 class="modal-title text-success" id="exampleModalLabel"> თქვენ ხმას აძლევთ</h2></center>
+                                    <br>
+                                    <table style ="font-size:36px;" id="votingConfirmationTable" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <td>ლოგო</td>
+                                                <td>ნომერი</td>
+                                                <td>დასახელება</td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    <h3 class="modal-title text-danger" ><center>ყურადღება, ეს არჩევანი საბოლოოა</center></h3>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="hidden" name="voteCandidate">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">გაუქმება და უკან დაბრუნება</button>
+                                    <button type="submit" class="btn btn-primary" >ვადასტურებ</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
-        <!-- end of modal window for delete confirmation--> 
+            </form>
+            <!-- end of modal window for delete confirmation--> 
+            <?php
+        } else {
+            echo "<h1>ოკუპირებულ ტერიტორიებზე არჩევნები არ ტარდება</1> ";
+            echo "<hr><a href=\"majoritarianDistrictsMap.php\">უკან დაბრუნება</a>";
+        }
+        ?>
+
+
+
 
     </div>
     <script>
